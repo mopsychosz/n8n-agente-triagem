@@ -1,0 +1,140 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Triagem de Atendimento ",
+        "formDescription": "Cole a mensagem do cliente abaixo para análise com IA.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Mensagem do Cliente",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "1c50ff82-e129-4428-a111-efdad5a45b49",
+      "name": "On form submission",
+      "webhookId": "bb0f072c-9b4a-4765-8f88-02cf767269ac"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Você é um agente especialista em triagem de atendimento ao cliente.\n\nAnalise a seguinte mensagem do cliente:\n{{ $json['Mensagem do Cliente'] }}\n\nResponda ESTRITAMENTE no seguinte formato:\n\nUrgência: [Alta / Média / Baixa]\nResumo: [Uma frase resumindo o problema do cliente]\nResposta Sugerida: [Uma resposta empática, profissional e pronta para enviar ao cliente]",
+        "messages": {
+          "messageValues": []
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        224,
+        0
+      ],
+      "id": "18d157df-384c-4cd3-9475-4becd4161b1b",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        224
+      ],
+      "id": "bb5b2ae2-6ddb-43b2-b5c0-970d2d50109c",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Análise do Chamado Concluída",
+        "completionMessage": "=### Resultado da Triagem (IA)\n\n{{ $json.text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        592,
+        0
+      ],
+      "id": "15220a9a-445b-4812-b9bd-8c6bde9590a9",
+      "name": "Form",
+      "webhookId": "4bafa87c-d523-4adf-9dd2-ef47fbdbe819"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "67ebb2ab-6a4d-40c8-9dc6-909f4f2b222f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "de93c9b84e89e258416a02c26f8faf4adcd9e8843381734ccdb1b0ce4beef033"
+  },
+  "nodeGroups": [],
+  "id": "NvHDGuyVayOSOs0m",
+  "tags": []
+}
