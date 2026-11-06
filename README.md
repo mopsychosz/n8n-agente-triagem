@@ -27,7 +27,7 @@ Em equipas de atendimento ao cliente, a triagem manual de incidentes consome mui
 
 ---
 
-## 📸 Demonstração / Screenshots
+## Demonstração / Screenshots
 <img width="1839" height="927" alt="Captura de tela 2026-11-04 132841" src="https://github.com/user-attachments/assets/f4047bbd-5caf-41b7-98cc-379d39d006f8" />
 
 ---
